@@ -1,0 +1,28 @@
+name: ci
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+  push:
+    branches: [main, "jog-merge/**"]
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - env:
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          case "$HEAD_REF" in
+            r3m/fail-*) echo "r3m: this branch's build fails on purpose"; exit 1;;
+            r3m/m5[abc]-*) echo "r3m: M5's barrier, so the early merge meets a pending exit job"; sleep 90;;
+          esac
+          echo "r3m build"
+  gate:
+    needs: [build]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - run: test "${{ needs.build.result }}" = success
