@@ -1,0 +1,11 @@
+name: forge
+on:
+  push:
+    branches: ["r3m/forge-*"]
+permissions: {}
+jobs:
+  r3m-never-1795761865:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - run: echo "r3m M4c, a side branch's job named as the required check"
