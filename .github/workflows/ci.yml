@@ -26,3 +26,10 @@ jobs:
     timeout-minutes: 5
     steps:
       - run: test "${{ needs.build.result }}" = success
+  jog-exit-91c7d692fd433856:
+    needs: [gate]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - run: test "${{ needs.gate.result }}" = success
